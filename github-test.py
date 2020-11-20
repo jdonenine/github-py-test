@@ -1,6 +1,5 @@
-import logging
 import uuid
-from github import Github, InputGitAuthor
+from github import Github
 
 # This is a small script that does the following to quickly test how tokens work within GitHub:
 # * Connect/Login to GitHub using a provided personal-access-token (gh_token)
@@ -9,8 +8,8 @@ from github import Github, InputGitAuthor
 # * Create a new file on the new branch in the forked repo
 # * Generate a PR in the original repo (gh_repo) to merged from the forked repo back into the original
 
-gh_repo = 'absurdfarce/schema-playground'
-gh_token = 'ff2561c652c45d1ec2d02f8a8e93dcd085866587'
+gh_repo = ''
+gh_token = ''
 
 # Connect to GitHub and gather info about the user
 # provided by the token
@@ -60,5 +59,7 @@ file_content = 'Testing, Testing, Testing ' + uuid_str
 fork.create_file(path = file_path, message = "Test Content " + uuid_str, content = file_content, branch = new_branch_name)
 
 # create a PR from the fork branch into the original branch
-print('Creating PR')
-repo.create_pull(title = "Schemas for uuid " + uuid_str, body = "Schemas for uuid " + uuid_str, base = default_branch_name, head = user.login + ':' + new_branch_name)
+pr_name = pr_body = "Test changes for uuid " + uuid_str
+print('Creating PR: %s' % pr_name)
+pr = repo.create_pull(title = pr_name, body = pr_body, base = default_branch_name, head = user.login + ':' + new_branch_name)
+print('Created PR at: %s' % pr.html_url)
